@@ -1,16 +1,7 @@
-body{
-    margin:40px auto;
-    max-width:650px;
-    line-height:1.6;
-    font-size:18px;
-    color:#444;
-    padding:010px
+body {
+    margin: 60px auto;
+    width: 70%;
 }
-
-h1,h2,h3 {
-    line-height:1.2
-}
-
 nav ul, footer ul {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
     padding: 0px;
@@ -27,6 +18,10 @@ a {
 }
 a:hover {
     text-decoration: underline;
+}
+h1 {
+    font-size: 3em;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
     font-size: 1.5em;
