@@ -3,61 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
-    body {
-      margin:40px auto;
-      max-width:650px;
-      line-height:1.6;
-      font-size:18px;
-      color:#fdf6e3;
-      padding:010px;
-      background-color:#002b36;
-      font-family:arial;
-    }
-    h1,h2,h3 {
-      line-height:1.2
-    }
-    a:link,a:visited,a:hover,a:active {
-      color: #eee8d5;
-      text-decoration: none;
-      font-family:arial;
-    }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
     <title>Homepage</title>
   </head>
   <body>
     <h1> Hello, Matthew. </h1>
     <p>It is currently <em id="time"></em>.</p>
-
+    <script src="sampleClock.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.0.0.min.js"></script>
+    <p><em id="weather"></em></p>
     <script>
-    function updateClock() {
-      var now = new Date(),
-      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      time = formatAMPM(now), 
-      date = [months[now.getMonth()],
-      getOrdinal(now.getDate()) + ',',
-      now.getFullYear()].join(' ');
-      document.getElementById('time').innerHTML = [date, time].join(' at ');
-      var t = setTimeout(updateClock, 500);
-    }
-    function getOrdinal(n) {
-      var s=["th","st","nd","rd"],
-      v=n%100;
-      return n+(s[(v-20)%10]||s[v]||s[0]);
-    }
-    function formatAMPM(date) {
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var seconds = date.getSeconds();
-      var ampm = hours >= 12 ? 'pm' : 'am';
-      hours = hours % 12;
-      hours = hours ? hours : 12; // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      seconds = seconds < 10 ? '0'+seconds : seconds;
-      var strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-      return strTime;
-    }
-    updateClock();
+    reallySimpleWeather.weather({
+      location: 'Franklin Springs, NY',
+      woeid: '',
+      unit: 'f',
+      success: function(weather) {
+        html = '<p>In '+weather.city+' it is currently '+weather.temp+'°. '+weather.currently+'. The high is '+weather.high+'° and the low is '+weather.low+'°, and it feels like '+weather.wind.chill+'°.</p>';
+        document.getElementById('weather').innerHTML = html;
+      },
+    });
     </script>
 
     <b><i>Work:</i></b>
@@ -70,7 +34,6 @@
     <i> <a href="https://web.groupme.com/"> GroupMe |</a></i>
     <i> <a href="https://rateyourmusic.com/"> RateYourMusic |</a></i>
     <i> <a href="http://tvtropes.org/"> TVTropes |</a></i>
-    <i> <a href="https://www.wunderground.com/"> Weather Underground |</a></i>
     <i> <a href="https://www.youtube.com/feed/subscriptions/"> Youtube</a></i>
     <p></p>
   </body>
