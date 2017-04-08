@@ -18,7 +18,7 @@
       woeid: '',
       unit: 'f',
       success: function(weather) {
-        html = '<p>In '+weather.city+' it is currently '+weather.temp+'°. '+weather.currently+'. The high is '+weather.high+'° and the low is '+weather.low+'°, and it feels like '+weather.wind.chill+'°.</p>';
+        html = '<p>In '+weather.city+' it is currently '+weather.temp+'°. '+weather.currently+'. The high is '+weather.high+'°, the low is '+weather.low+'°, and it feels like '+weather.wind.chill+'°.</p>';
         document.getElementById('weather').innerHTML = html;
       },
     });
