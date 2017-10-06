@@ -13,31 +13,39 @@
     <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.0.0.min.js"></script>
     <p><em id="weather"></em></p>
     <script>
-    reallySimpleWeather.weather({
-    wunderkey: '821376f2ebc80afb', //add your key
-    location: 'Franklin Springs, NY',
-    // location: 'Colts Neck, NJ',
-    // location: 'Wardsboro, VT',
-    // location: 'Englewood, FL',
-    unit: 'f',
-      success: function(weather) {
-        html = '<p>In '+weather.city+' it is currently '+weather.temp+'° F. '+weather.currently+'. The high today is '+weather.forecast[0].high+'° F, and the low today is '+weather.forecast[0].low+'° F. Tomorrow, expect '+weather.forecast[1].text+' and a high of '+weather.forecast[1].high+'° F, and a low of '+weather.forecast[1].low+'° F.</p>';
-        document.getElementById('weather').innerHTML = html;
-      }
-    });
+        function httpGet(theUrl) {
+                var xmlHttp = new XMLHttpRequest()
+                xmlHttp.open( "GET", theUrl, false ) // false for synchronous request
+                xmlHttp.send( null )
+                return xmlHttp.responseText
+        }          
+        function getPostalCode(position) {
+            var latlon = position.coords.latitude + "," + position.coords.longitude    
+            var data = httpGet("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4")
+            data = JSON.parse(data)
+            var postal_code = data.results[0].address_components[0].long_name
+            console.log("postal_code:" + postal_code)
+            return postal_code
+        }
+        reallySimpleWeather.weather({
+        wunderkey: '821376f2ebc80afb', //add your key
+        location: navigator.geolocation.getCurrentPosition(getPostalCode),
+        unit: 'f',
+          success: function(weather) {
+            html = '<p>In '+weather.city+' it is currently '+weather.temp+'° F. '+weather.currently+'. The high today is '+weather.forecast[0].high+'° F, and the low today is '+weather.forecast[0].low+'° F. Tomorrow, expect '+weather.forecast[1].text+' and a high of '+weather.forecast[1].high+'° F, and a low of '+weather.forecast[1].low+'° F.</p>'
+            document.getElementById('weather').innerHTML = html
+          }
+        })
     </script>
     <b><i>Work:</i></b>
     <i> <a href="https://blackboard.hamilton.edu/">Blackboard |</a></i>
     <i> <a href="http://dashboard.oup.com/"> Dashboard |</a></i>
     <i> <a href="http://webprint.hamilton.edu/"> Webprint </a></i>
     <p></p>    
-    <b><i>Play:</i></b>
-    <i> <a href="https://web.groupme.com/"> GroupMe |</a></i>   
-    <i> <a href="https://www.messenger.com/"> Messenger |</a></i>      
+    <b><i>Play:</i></b>   
     <i> <a href="http://www.myfitnesspal.com/"> MyFitnessPal |</a></i>   
     <i> <a href="https://rateyourmusic.com/"> RateYourMusic |</a></i>  
     <i> <a href="https://twitter.com"> Twitter |</a></i>      
-    <i> <a href="http://tvtropes.org"> TVTropes |</a></i>    
     <i> <a href="https://www.youtube.com/"> Youtube</a></i>
     <p></p>
   </body>
