@@ -13,23 +13,9 @@
     <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.0.0.min.js"></script>
     <p><em id="weather"></em></p>
     <script>
-        function httpGet(theUrl) {
-                var xmlHttp = new XMLHttpRequest()
-                xmlHttp.open( "GET", theUrl, false ) // false for synchronous request
-                xmlHttp.send( null )
-                return xmlHttp.responseText
-        }          
-        function getPostalCode(position) {
-            var latlon = position.coords.latitude + "," + position.coords.longitude    
-            var data = httpGet("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4")
-            data = JSON.parse(data)
-            var postal_code = data.results[0].address_components[0].long_name
-            console.log("postal_code:" + postal_code)
-            return postal_code
-        }
         reallySimpleWeather.weather({
         wunderkey: '821376f2ebc80afb', //add your key
-        location: navigator.geolocation.getCurrentPosition(getPostalCode),
+        location: 13323,
         unit: 'f',
           success: function(weather) {
             html = '<p>In '+weather.city+' it is currently '+weather.temp+'° F. '+weather.currently+'. The high today is '+weather.forecast[0].high+'° F, and the low today is '+weather.forecast[0].low+'° F. Tomorrow, expect '+weather.forecast[1].text+' and a high of '+weather.forecast[1].high+'° F, and a low of '+weather.forecast[1].low+'° F.</p>'
