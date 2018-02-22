@@ -25,7 +25,7 @@ function randomQuoteGrabber() {
   "Does this need a program or could I use another tool?",
   "First, solve the problem. Then, write the code.",
   "Simplicity is prerequisite for reliability.",
-  "Easy things hould be easy; hard things should be possible.",
+  "Easy things should be easy; hard things should be possible.",
   "The most effective debugging tool is still careful thought, coupled with judiciously placed print statements.",
   "Deleted code is debugged code.",
   "Are you getting confused by the complexities of your own making?",
@@ -157,7 +157,7 @@ function randomQuoteGrabber() {
   "Can you adapt something that you already have?",
   "Read the documentation properly. Read it again.",
   "Can you build a simulator to help reproduce the problem conditions?",
-  "Imagine you had unlimitted time, budget, memory and compute power. What would you do?",
+  "Imagine you had unlimited time, budget, memory and compute power. What would you do?",
   "Don't trust a bug report until you've seen the problem with your own eyes."];
   
    var randomNumber = Math.round(Math.random() * quotes.length);
