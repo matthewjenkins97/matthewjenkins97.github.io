@@ -5,7 +5,7 @@ LONGITUDE = "-75.3785"
 //PLEASE PLACE YOUR PREFERRED UNIT (C OR F) HERE
 TEMP_UNIT = "f"
 
-function httpGet(the_url) {
+function http_get(the_url) {
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", the_url, false); // false for synchronous request
   xmlHttp.send(null);
@@ -14,7 +14,8 @@ function httpGet(the_url) {
 
 function weather() {
   latlon = LATITUDE + "," + LONGITUDE
-  loc = httpGet("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4")
+  //if you steal this api key shame on you
+  loc = http_get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4")
   loc = JSON.parse(loc)
   postal_code = loc.results[0].address_components[0].long_name
 
@@ -31,6 +32,6 @@ function weather() {
       document.getElementById("temp_misc").innerHTML = temp_misc
     }
   })
-  setTimeout(update_clock, 3600000)
+  setTimeout(weather, 300000)
 }
 weather()
