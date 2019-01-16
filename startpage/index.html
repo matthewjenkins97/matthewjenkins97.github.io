@@ -10,8 +10,8 @@
     <h1> Hello, Matthew. </h1>
     <p>It is currently <em id="time"></em>.</p>
     <script src="sampleClock.js"></script>
-    <script src="https://s3-us-west-2.amazonaws.com/reallysimpleweather/reallysimpleweather-1.0.0.min.js"></script>
-    <p><em id="weather"></em></p>  
+    <script src="https://unpkg.com/reallySimpleWeather@1.1.0/reallysimpleweather-1.1.0.js"></script>
+    <p><em id="weather"></em></p>
     <script>   
     function httpGet(theUrl) {
         var xmlHttp = new XMLHttpRequest();
@@ -21,6 +21,7 @@
     };     
     navigator.geolocation.getCurrentPosition(function(position) {
         var latlon = position.coords.latitude + "," + position.coords.longitude;
+        //if you steal this api key shame on you
         var loc = httpGet("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4");
         loc = JSON.parse(loc);
         var postal_code = loc.results[0].address_components[0].long_name;
@@ -29,7 +30,17 @@
             location: postal_code,
             unit: 'f',
               success: function(weather) {
-                html = '<p>In '+weather.city+' it is currently '+weather.temp+'° F. '+weather.currently+'. The high today is '+weather.forecast[0].high+'° F, and the low today is '+weather.forecast[0].low+'° F. Tomorrow, expect '+weather.forecast[1].text+' and a high of '+weather.forecast[1].high+'° F, and a low of '+weather.forecast[1].low+'° F.</p>';
+                //check if weather.currently.toLowerCase() contains any of the following words as a substring
+                bad_weather = false
+                bad_weather_types = ["drizzle", "rain", "snow", "ice", "hail", "mist", "spray", "showers"]
+                for (i = 0; i < bad_weather_types.length; i++) {
+                    if (bad_weather_types[i].indexOf(weather.currently.toLowerCase()) != -1) {
+                        bad_weather = true
+                        break
+                    }
+                }
+                text = (Number(weather.feelslike_f) < 45 || bad_weather) ? "You should bring your jacket with you." : "You should leave your jacket at home."
+                html = '<p>In '+ weather.city + ', it is currently ' + parseInt(weather.temp) + '°F. ' + weather.currently + '. ' + text + '</p>';
                 document.getElementById('weather').innerHTML = html;
         }});
     });
