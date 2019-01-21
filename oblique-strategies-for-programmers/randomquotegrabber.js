@@ -163,5 +163,5 @@ function randomQuoteGrabber() {
    var randomNumber = Math.round(Math.random() * quotes.length);
    document.getElementById('oblique').innerHTML = quotes[randomNumber];
 }
-randomQuoteGrabber()
+randomQuoteGrabber();
 
