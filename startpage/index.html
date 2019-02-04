@@ -39,7 +39,7 @@
                         break;
                     }
                 }
-                text = (Number(weather.feelslike_f) < 40 || bad_weather) ? "You should bring your jacket with you." : "You should leave your jacket at home.";
+                text = (Number(weather.feelslike_f) < 55 || bad_weather) ? "You should bring your jacket with you." : "You should leave your jacket at home.";
                 html = "<p>In " + weather.city + ", it is currently " + parseInt(weather.temp) + "°F. " + weather.currently + ". " + text + "</p>";
                 document.getElementById('weather').innerHTML = html;
         }});
