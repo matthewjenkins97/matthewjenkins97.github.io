@@ -10,39 +10,62 @@
     <h1> Hello, Matthew. </h1>
     <p>It is currently <em id="time"></em>.</p>
     <script src="sampleClock.js"></script>
-    <script src="https://unpkg.com/reallySimpleWeather@1.1.0/reallysimpleweather-1.1.0.js"></script>
     <p><em id="weather"></em></p>
     <script>   
+
     function httpGet(theUrl) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", theUrl, false); // false for synchronous request
-        xmlHttp.send(null);
-        return xmlHttp.responseText;
-    }     
+      /* 
+      Input: URL
+      Output: response text from a GET request.
+      */
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", theUrl, false);
+      xmlHttp.send(null);
+      return xmlHttp.responseText;
+    }
+    
     navigator.geolocation.getCurrentPosition(function(position) {
-        var latlon = position.coords.latitude + "," + position.coords.longitude;
-        //if you steal this api key shame on you
-        var loc = httpGet("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlon + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4");
-        loc = JSON.parse(loc);
-        var postal_code = loc.results[0].address_components[0].long_name;
-        reallySimpleWeather.weather({
-            wunderkey: "821376f2ebc80afb", //if you steal this api key shame on you
-            location: postal_code,
-            unit: "f",
-              success: function(weather) {
-                //check if weather.currently.toLowerCase() contains any of the following words as a substring
-                bad_weather = false;
-                bad_weather_types = ["drizzle", "rain", "snow", "ice", "hail", "mist", "fog", "volcanic", "dust", "sand", "haze", "spray", "showers"];
-                for (i = 0; i < bad_weather_types.length; i++) {
-                    if (bad_weather_types[i].indexOf(weather.currently.toLowerCase()) != -1) {
-                        bad_weather = true;
-                        break;
-                    }
-                }
-                text = (Number(weather.feelslike_f) < 55 || bad_weather) ? "You should bring your jacket with you." : "You should leave your jacket at home.";
-                html = "<p>In " + weather.city + ", it is currently " + parseInt(weather.temp) + "°F. " + weather.currently + ". " + text + "</p>";
-                document.getElementById('weather').innerHTML = html;
-        }});
+      /* 
+      Input: X/Y coordinates, represented as Latitude / Longitude
+      Output: Text in the format of
+
+      "In {Town}, it is currently {temperature}°. {Status}. {You should bring a jacket with you. / You should leave your jacket at home.}",
+
+      sent to the "weather" tag above.
+      */
+
+      // we start by parsing location data - needed because we need to get the location of the town, as well as for the dark sky api
+      var latitudeLongitude = position.coords.latitude + "," + position.coords.longitude;
+      // using google API
+      var locLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitudeLongitude + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4";
+
+      // debug
+      // var latitudeLongitude = "34.7,-92.2";
+      // // using google API
+      // var locLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitudeLongitude + "&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4";
+
+      var loc = httpGet(locLink);
+      var locData = JSON.parse(loc);
+      var townName = locData.results[0].address_components[1].long_name;
+
+      // then we use the above information to get the weather
+      var weatherLink = 'https://cors-anywhere.herokuapp.com/' + "https://api.darksky.net/forecast/d11406c31769ff7130c6605f5c4378e2/" + latitudeLongitude;
+      //if you steal this api key shame on you
+      var weatherJson = httpGet(weatherLink);
+      var weatherData = JSON.parse(weatherJson);
+
+      // parsing of useful information - this is for DINAJ emulation
+      // first we check for if it's bad weather
+      // we do this by checking weather is a bad weather in the range [rain, snow, sleet, hail, thunderstorm, tornado]
+      var badWeather = ["Rain", "Snow", "Sleet", "Wind", "Hail", "Thunderstorm", "Tornado"].includes(weatherData.currently.icon)
+
+      // after that, we check if windchill <= 55
+      var windchill = (weatherData.currently.apparentTemperature) <= 55;
+
+      // then we merge the two using a ternary operator
+
+      var DINAJ = windchill || badWeather ? "You should bring a jacket with you." : "You should leave your jacket at home."
+      document.getElementById("weather").innerHTML = "In " + townName + ", it is currently " + Math.round(weatherData.currently.temperature) + "°. " + weatherData.currently.summary + ". " + DINAJ; 
     });
     </script>
   </body>
