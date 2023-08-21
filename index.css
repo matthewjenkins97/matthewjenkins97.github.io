@@ -1,6 +1,4 @@
 body {
-    margin: 40px auto;
-    max-width: 650px;
     line-height: 1.6;
     font-size: 18px;
     color: #444;
@@ -22,4 +20,19 @@ a.button {
     padding: 0 10px;
     border: 1px solid #444;
     color: #444;
+}
+
+.container {
+    margin: 1em;
+}
+
+.left {
+    width: calc(25% - (.5em + 6px));
+    float: left;
+    max-width: 400px;
+}
+
+.right {
+    width: calc(75% - (.5em + 6px));
+    float: right;
 }
